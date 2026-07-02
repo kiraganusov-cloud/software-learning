@@ -1,127 +1,47 @@
-#Talking Data Starter Code
-
-#Part 2 Setting up the program
-import pandas as pd
+# This code is written in python
+# The pandas library is used for data processing and to read data files
+import pandas as pd 
+#The matplotlib library is used to plot histograms and scatter plots
 import matplotlib.pyplot as plt
+# The GWCutilities has functions to help format data printed to the console
+import GWCutilities as util
 
-pd.set_option('display.max_columns', None)
-pd.set_option('max_colwidth', None)
+# Read a comma separated values (CSV) files into a variable
+# as a pandas DataFrame
+lwd=pd.read_csv("livwell135.csv")
 
-movieData = pd.read_csv('./rotten_tomatoes_movies.csv')
-favMovie = "The Greatest Showman"
+# Print settings, characters, and context
 
-print("My favorite movie is " + favMovie)
+print("\n India is widely known as one of the most populated countries in the world and a technology and undustrial hub. Poverty there is prominent, but reducing, and economic inequality is still a major issue. India's technological advancements make for a decent education system, but womens education still lags behind mens. Only around 55% of 22-year-old women have enrolled in higher education.")
+print("\n Niger, a low-income, poverty-stricken country, has much lower education and literacy levels. Female primary school participation is just over 50%, which is an 8 year difference in education and learning. The lack of resources and encouragement for women in education leads to their lessened years of education. There are also has many obstructions, such as child marriage/early pregnancy, poverty and economic constraints, distance and infrastructure, and more.")
 
+input("\n Press ENTER to continue")
 
-#Part 3 Investigate the data
+print("\n  In Niger, there is not as high quality of education as there is in India, so women don’t have as many years of education. The poorness of the country also means significantly less households with electricity, which is visible on the graph,  but also limits the access to education and digital learning. ")
+print("\n Women in India are likely to have more competition and interest in pursuing more years of education because they have more visible access to education. India is also a technology hub, so the education is likely more centered around electronics and technology, furthering their industry stance. Women in Niger tend to learn trades instead of pursuing an education like the women in India because it is much less available and not as important in their country’s economy.")
 
+input("\n Press ENTER to view the graphed data and research question")
 
+# graph:
+print("Orange - Niger \nBlue - India")
+listOfcountries = lwd["country_name"].unique()
+# countries = india & niger
 
-#Part 4 Filter data
-print("\nThe data for my favorite movie is:\n")
-#Create a new variable to store your favorite movie information
-
-favMovieBooleanList = movieData["movie_title"] == favMovie
-
-favMovieData = movieData.loc[favMovieBooleanList]
-print(favMovieData)
-
-print("\n\n")
-
-#Create a new variable to store a new data set with a certain genre
-
-
-dramaBooleanList = movieData["genres"].str.contains("Drama")
-dramaMovieData = movieData.loc[dramaBooleanList]
-
-numOfMovies = dramaMovieData.shape[0]
+NigerCountryData = lwd.loc[lwd["country_name"] == "Niger"] # Orange
+IndiaCountryData = lwd.loc[lwd["country_name"] == "India"] # blue
 
 
-print("We will be comparing " + favMovie +
-      " to other movies under the genre Drama in the data set.\n")
-print("There are " + str(numOfMovies) + " movies under the category Drama.")
+plt.scatter(data=IndiaCountryData, x="ED_educ_years_mean", y="EI_women_elec_p")
+plt.scatter(data=NigerCountryData, x="ED_educ_years_mean", y="EI_women_elec_p")
 
-print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
-input("Press enter to see more information about how " + favMovie +
-      " compares to other movies in this genre.\n")
+plt.xlim(0,7)
+plt.ylim(0,100)
+plt.xlabel("Female average/median years of schooling")
+plt.ylabel("Women living in an household with electricity (%)")
+plt.title("Years of Schooling vs. Women Living with Electricity")
 
-#Part 5 Describe data
-tgsAudRating = 86
-
-#min
-ratings = dramaMovieData["audience_rating"]
-
-min = ratings.min()
-print("The min audience rating of the data set is: " + str(min))
-print(favMovie + " is rated " + str(tgsAudRating - min) + " points higher than the lowest rated movie.")
-print()
-
-#find max
-max = ratings.max()
-print("The max audience rating of the data set is: " + str(max))
-print(favMovie + " is rated " + str(max - tgsAudRating) + " points lower than the highest rated movie.")
-print()
-
-#find mean
-sum = 0
-for rating in ratings:
-    sum += rating
-
-mean = int(sum / numOfMovies)
-
-print("The mean audience rating of the data set is: " + str(mean))
-print(favMovie + " is higher than the mean movie rating.")
-
-#find median
-
-median = ratings.median()
-print("The median audience rating of the data set is: " + str(median))
-print(favMovie + " is higher than the median movie rating.")
-
-print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
-input("Press enter to see data visualizations.\n")
-
-#Part 6 Create graphs
-#Create histogram
-plt.hist(ratings, range = (0, 100), bins = 20)
-
-#Adds labels and adjusts histogram
-plt.grid(True)
-plt.title("Audience Rating Distribution in Drama Movies")
-plt.xlabel("Audience Rating")
-plt.ylabel("# of Movies")
-
-#Prints interpretation of histogram
-print(
-  "According to the histogram, the most movies have an audience rating between 75 to 79"
-)
-print()
-
-#Show histogram
-plt.show()
-input("Press enter to see the next data visualization.\n")
-
-plt.figure()
-
-#Create scatterplot
-plt.scatter(data = dramaMovieData, x = "audience_rating", y = "critic_rating")
-
-#Adds labels and adjusts scatterplot
-plt.grid(True)
-plt.title("Critic Ratings vs. Audience Ratings in Drama Movies")
-plt.xlabel("Audience Rating")
-plt.ylabel("Critic Rating")
-plt.xlim(0, 100)
-plt.ylim(0, 100)
-
-#Prints interpretation of scatterplot
-print(
-  "According to the scatter plot, there is a positive correlation between the audience ratings and critic ratings. However, that are many outliers."
-)
-print()
-
-
-#Show scatterplot
 plt.show()
 
-print("\nThank you for reading through my data analysis!")
+#research question
+print("\nI believe that if women in Niger have more access to electricity, they will be able to access more education and their literacy rates and years of education will increase.")
+print("\n My question: What innovative and accessible ways could women in Niger generate more electricity?")
